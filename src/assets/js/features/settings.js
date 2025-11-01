@@ -573,7 +573,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <p>
                             Thank you so much for using <a href="https://waves.lat/" target="_blank" class="hover-link">Current!</a> 
                             If you have any suggestions or issues, please contact us on our <a href="https://discord.gg/7Qh7qWs6Du" target="_blank" class="hover-link">Discord server</a> 
-                            or open an issue on our <a href="https://gitlab.com/waveslab/Waves" target="_blank" class="hover-link">Gitlab repository</a> <3
+                            or open an issue on our <a href="https://github.com/PsychyBruh/Current" target="_blank" class="hover-link">GitHub repository</a> <3
                         </p>
                     </div>
                 </div>
