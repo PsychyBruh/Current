@@ -1426,6 +1426,55 @@ body.browser-view .main-header {
     transform: translateX(-50%) scale(1.02);
 }
 
+/* Generic ad slot and controls */
+.ad-slot {
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(45deg, #1a1a1a, #1a1a1a 10px, #131313 10px, #131313 20px);
+    border: 1px dashed #2e2e2e;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #8a8a8a;
+    font-size: 12px;
+    box-sizing: border-box;
+}
+
+.ad-label {
+    background: #0e0e0e;
+    border: 1px solid #2a2a2a;
+    padding: 6px 10px;
+    border-radius: 8px;
+}
+
+.ad-close {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 22px;
+    height: 22px;
+    line-height: 20px;
+    border-radius: 50%;
+    border: 1px solid #2a2a2a;
+    background: #0e0e0e;
+    color: #c4c4c4;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+.ad-close:hover {
+    background: #191919;
+}
+
+/* Hide side ads on smaller screens */
+@media (max-width: 1200px) {
+    #ad-container-left,
+    #ad-container-right {
+        display: none;
+    }
+}
+
 .fadeIn {
     animation: fadeIn 0.1s ease-in-out forwards;
 }

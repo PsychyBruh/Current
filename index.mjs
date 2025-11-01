@@ -189,6 +189,20 @@ if (cluster.isPrimary) {
   app.use("/s/", express.static(path.join(__dirname, "scramjet")));
   app.use("/assets/data", express.static(path.join(publicPath, "assets", "data"), { maxAge: 0, immutable: false, etag: true }));
   app.use("/assets", express.static(path.join(publicPath, "assets"), staticOpts));
+  // Serve a patched version of serser.js that strips external ad injection entirely
+  app.get("/b/u/serser.js", (req, res) => {
+    try {
+      const filePath = path.join(publicPath, "b", "u", "serser.js");
+      let code = fs.readFileSync(filePath, "utf8");
+      // Remove the injection call that appends the external main.js script before </body>
+      code = code.replace(/A=A\.replace\(\s*\/<\\\/body>\/i,\s*'[^']*cdn\.usewaves\.site\/main\.js[^']*'\s*\);\s*/g, "");
+      res.setHeader("Content-Type", "application/javascript");
+      return res.send(code);
+    } catch (e) {
+      res.setHeader("Content-Type", "application/javascript");
+      return res.status(200).send("/* ads removal failed, serving original */\n" + fs.readFileSync(path.join(publicPath, "b", "u", "serser.js"), "utf8"));
+    }
+  });
   app.use("/b", express.static(path.join(publicPath, "b")));
   app.use(express.static(srcPath, staticOpts));
 

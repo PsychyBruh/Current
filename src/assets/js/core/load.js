@@ -444,3 +444,11 @@ window.addEventListener("load", function () {
 
   loadAdScripts();
 });
+
+// Basic close behavior for side ad containers
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('.ad-close');
+  if (!btn) return;
+  const parent = btn.closest('#ad-container-left, #ad-container-right, #ad-container-bottom');
+  if (parent) parent.style.display = 'none';
+});

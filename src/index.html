@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>浪潮.ᐟ</title>
+    <title>Current.</title>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
     <link rel="icon" href="/assets/images/icons/favicon.ico" type="image/x-icon" />
     <link rel="preload" href="/assets/css/index.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
@@ -76,7 +76,7 @@
     <div id="sharePrompt" style="display:none;">
         <i class="fa-regular fa-share-nodes" style="font-size:40px;margin-bottom:15px;"></i>
         <label>Hey!</label>
-        <p>Please consider sharing this site with your friends to help keep everything running smoothly</p>
+        <p>Please think about sharing this site with your friends because it helps keep the site running smoothly! Thanks! </p>
         <button class="prompt-close-btn" id="sharePromptClose">Okay</button>
     </div>
     <script src="/assets/js/core/load.js"></script>
@@ -129,9 +129,22 @@
             </a>
         </div>
 
-        
-        <div id="settings-menu" class="settings-menu"></div>
-        <div id="overlay" class="overlay"></div>
+
+    <div id="settings-menu" class="settings-menu"></div>
+    <div id="overlay" class="overlay"></div>
+    <!-- Side Banner Ad Containers -->
+    <div id="ad-container-left" class="ad-container-left" aria-hidden="true">
+        <button class="ad-close" title="Hide ad" aria-label="Hide left ad">×</button>
+        <div class="ad-slot" role="complementary" aria-label="Left banner ad">
+            <span class="ad-label">Ad 160×300</span>
+        </div>
+    </div>
+    <div id="ad-container-right" class="ad-container-right" aria-hidden="true">
+        <button class="ad-close" title="Hide ad" aria-label="Hide right ad">×</button>
+        <div class="ad-slot" role="complementary" aria-label="Right banner ad">
+            <span class="ad-label">Ad 170×300</span>
+        </div>
+    </div>
         <div class="main-container">
             <div class="search-title">----</div>
             <div class="search-bar">
