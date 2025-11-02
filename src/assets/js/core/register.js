@@ -10,7 +10,7 @@
   class WavesConnectionManager {
     constructor() {
       this.state = STATES.IDLE;
-      this.appConfig = { backend: 'scramjet', transport: 'epoxy', customWispUrl: null };
+      this.appConfig = { backend: 'scramjet', transport: 'libcurl', customWispUrl: null };
       this.bareMuxConnection = null;
       this.currentWispUrl = '';
       this.healthCheckInterval = null;

@@ -591,10 +591,7 @@ function renderSmartlinkBanners() {
       overlay.appendChild(cta);
       overlay.appendChild(sponsor);
 
-      let loaded = false;
-      const fallbackTimer = setTimeout(() => {
-        if (loaded) return;
-        // Fallback: render a simple creative with a Scramjet CTA
+      function renderFallback() {
         while (slot.firstChild) slot.removeChild(slot.firstChild);
         const wrap = document.createElement('div');
         wrap.className = 'smartlink-ad';
@@ -619,11 +616,24 @@ function renderSmartlinkBanners() {
         wrap.appendChild(sponsor2);
         slot.appendChild(wrap);
         slot.appendChild(beacon);
-      }, 3500);
+      }
+
+      let loaded = false;
+      const fallbackTimer = setTimeout(() => { if (!loaded) renderFallback(); }, 3500);
 
       frame.addEventListener('load', () => {
         loaded = true;
         clearTimeout(fallbackTimer);
+        try {
+          const doc = frame.contentDocument;
+          const txt = doc && doc.body ? (doc.body.innerText || '').toLowerCase() : '';
+          // Detect Scramjet error page content and fallback to CTA creative
+          if (txt.includes('there was an error loading') || txt.includes('tls handshake eof') || txt.includes('hyper client')) {
+            renderFallback();
+          }
+        } catch (_) {
+          // Cross-origin or other access issue; leave iframe as-is
+        }
       });
 
       slot.appendChild(frame);
