@@ -543,6 +543,7 @@ document.addEventListener('click', (e) => {
 function renderSmartlinkBanners() {
   try {
     const SMART_URL = 'https://www.effectivegatecpm.com/d8vbqize4?key=efe3c808c89563aff3dcaa89aabc9590';
+    const SMART_URL_SCRAMJET = '/b/s/' + SMART_URL;
     const slots = [
       document.querySelector('#ad-container-left .ad-slot'),
       document.querySelector('#ad-container-right .ad-slot')
@@ -565,31 +566,52 @@ function renderSmartlinkBanners() {
       beacon.style.opacity = '0';
       beacon.style.pointerEvents = 'none';
 
-      // Simple creative with CTA opening via Scramjet
-      const wrap = document.createElement('div');
-      wrap.className = 'smartlink-ad';
-      const tag = document.createElement('div');
-      tag.className = 'smartlink-ad-tag';
-      tag.textContent = 'Sponsored';
-      const h = document.createElement('div');
-      h.className = 'smartlink-ad-title';
-      h.textContent = 'Support Current';
-      const p = document.createElement('div');
-      p.className = 'smartlink-ad-text';
-      p.textContent = 'Your clicks help keep it free. Thanks!';
-      const cta = document.createElement('a');
-      cta.className = 'smartlink-ad-btn';
-      cta.href = '/b/s/' + SMART_URL;
-      cta.target = '_blank';
-      cta.rel = 'noopener noreferrer';
-      cta.textContent = 'Open Offer';
+      // Try to embed the smartlink page via Scramjet within the banner
+      const frame = document.createElement('iframe');
+      frame.className = 'smartlink-iframe';
+      frame.src = SMART_URL_SCRAMJET;
+      frame.title = 'Sponsored';
+      frame.referrerPolicy = 'no-referrer';
+      frame.loading = 'lazy';
+      frame.setAttribute('allow', 'fullscreen');
+      frame.setAttribute('sandbox', 'allow-scripts allow-forms allow-same-origin allow-popups');
 
-      wrap.appendChild(tag);
-      wrap.appendChild(h);
-      wrap.appendChild(p);
-      wrap.appendChild(cta);
+      let loaded = false;
+      const fallbackTimer = setTimeout(() => {
+        if (loaded) return;
+        // Fallback: render a simple creative with a Scramjet CTA
+        while (slot.firstChild) slot.removeChild(slot.firstChild);
+        const wrap = document.createElement('div');
+        wrap.className = 'smartlink-ad';
+        const tag = document.createElement('div');
+        tag.className = 'smartlink-ad-tag';
+        tag.textContent = 'Sponsored';
+        const h = document.createElement('div');
+        h.className = 'smartlink-ad-title';
+        h.textContent = 'Support Current';
+        const p = document.createElement('div');
+        p.className = 'smartlink-ad-text';
+        p.textContent = 'Your clicks help keep it free. Thanks!';
+        const cta = document.createElement('a');
+        cta.className = 'smartlink-ad-btn';
+        cta.href = SMART_URL_SCRAMJET;
+        cta.target = '_blank';
+        cta.rel = 'noopener noreferrer';
+        cta.textContent = 'Open Offer';
+        wrap.appendChild(tag);
+        wrap.appendChild(h);
+        wrap.appendChild(p);
+        wrap.appendChild(cta);
+        slot.appendChild(wrap);
+        slot.appendChild(beacon);
+      }, 3500);
 
-      slot.appendChild(wrap);
+      frame.addEventListener('load', () => {
+        loaded = true;
+        clearTimeout(fallbackTimer);
+      });
+
+      slot.appendChild(frame);
       slot.appendChild(beacon);
     });
   } catch (e) {
