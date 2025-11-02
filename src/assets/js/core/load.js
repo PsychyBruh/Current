@@ -381,83 +381,30 @@ document.addEventListener('DOMContentLoaded', function () {
   window.SharePromoter.init();
 });
 
-function loadBannerAdsSequentially(adsQueue) {
-  if (!adsQueue || adsQueue.length === 0) {
-    return;
-  }
-
-  const adConfig = adsQueue.shift();
-  const adContainer = document.getElementById(adConfig.containerId);
-
-  if (!adContainer) {
-    console.warn(`Skipping ad: Could not find container ${adConfig.containerId}`);
-    loadBannerAdsSequentially(adsQueue);
-    return;
-  }
-  
-  window.atOptions = adConfig.options;
-  
-  const invokeScript = document.createElement('script');
-  invokeScript.type = 'text/javascript';
-  invokeScript.src = `//spaniardinformationbookworm.com/${adConfig.options.key}/invoke.js`;
-  invokeScript.async = true;
-
-  const onFinish = () => {
-    invokeScript.removeEventListener('load', onFinish);
-    invokeScript.removeEventListener('error', onFinish);
-    loadBannerAdsSequentially(adsQueue);
-  };
-
-  invokeScript.addEventListener('load', onFinish);
-  invokeScript.addEventListener('error', onFinish);
-
-  adContainer.appendChild(invokeScript);
-}
-
-
 window.addEventListener("load", function () {
-  function loadAdScriptWithRetry(src, retries = 3, delay = 5000) {
-    function attempt(remaining) {
-      const script = document.createElement("script");
-      script.type = "text/javascript";
-      script.src = src + (src.includes("?") ? "&" : "?") + "cb=" + Date.now();
-      script.async = true;
-
-      script.onload = () =>
-      script.onerror = () => {
-        console.warn(
-          `Failed to load ${src}. Remaining attempts: ${remaining - 1}`
-        );
-        if (remaining > 1) {
-          setTimeout(() => attempt(remaining - 1), delay);
-        } else {
-          console.error(`All attempts to load ${src} has failed!`);
-        }
-      };
-
-      document.body.appendChild(script);
-    }
-    attempt(retries);
-  }
-
-  function loadAdScripts() {
-    const adSources = [
-      "//spaniardinformationbookworm.com/a1/37/68/a1376848d2be9154b24a145e7a3a8df6.js",
-      "//spaniarlinformationbookworm.com/1d/8d/ce/1d8dce254be83f85ebd908954bceb5f1.js",
-    ];
-
-    const incrementalDelay = 300000;
-
-    adSources.forEach((src, index) => {
-      setTimeout(() => loadAdScriptWithRetry(src, 3, 5000), index * incrementalDelay);
-    });
-  }
+  // Defensive cleanup: remove any previously injected third‑party overlay iframes
+  (function removeThirdPartyOverlays() {
+    try {
+      const suspects = [
+        ...document.querySelectorAll('iframe[src*="spaniardinformationbookworm.com"], iframe[src*="spaniarlinformationbookworm.com"]'),
+        ...document.querySelectorAll('iframe[id^="container-"][class^="container-"]')
+      ];
+      suspects.forEach(el => {
+        try { el.remove(); } catch {}
+      });
+      // Also remove any vendor scripts still present
+      document.querySelectorAll('script[src*="spaniardinformationbookworm.com"], script[src*="spaniarlinformationbookworm.com"]').forEach(s => {
+        try { s.remove(); } catch {}
+      });
+    } catch {}
+  })();
 
   // Expose to settings and power users to trigger ads for current session
   function triggerSupportAds() {
     if (typeof window.clientAdBeacon === 'function') window.clientAdBeacon();
     renderSmartlinkBanners();
-    loadAdScripts();
+    // Disabled network ad scripts to prevent floating iframes from third parties
+    // loadAdScripts();
   }
   window.triggerSupportAds = triggerSupportAds;
 
@@ -591,50 +538,7 @@ function renderSmartlinkBanners() {
       overlay.appendChild(cta);
       overlay.appendChild(sponsor);
 
-      function renderFallback() {
-        while (slot.firstChild) slot.removeChild(slot.firstChild);
-        const wrap = document.createElement('div');
-        wrap.className = 'smartlink-ad';
-        const h = document.createElement('div');
-        h.className = 'smartlink-ad-title';
-        h.textContent = 'Support Current';
-        const p = document.createElement('div');
-        p.className = 'smartlink-ad-text';
-        p.textContent = 'Your clicks help keep it free. Thanks!';
-        const cta2 = document.createElement('a');
-        cta2.className = 'smartlink-ad-btn';
-        cta2.href = SMART_URL_SCRAMJET;
-        cta2.target = '_blank';
-        cta2.rel = 'noopener noreferrer';
-        cta2.textContent = 'Open Offer';
-        const sponsor2 = document.createElement('div');
-        sponsor2.className = 'smartlink-ad-sponsor';
-        sponsor2.textContent = 'Sponsored AD';
-        wrap.appendChild(h);
-        wrap.appendChild(p);
-        wrap.appendChild(cta2);
-        wrap.appendChild(sponsor2);
-        slot.appendChild(wrap);
-        slot.appendChild(beacon);
-      }
-
-      let loaded = false;
-      const fallbackTimer = setTimeout(() => { if (!loaded) renderFallback(); }, 3500);
-
-      frame.addEventListener('load', () => {
-        loaded = true;
-        clearTimeout(fallbackTimer);
-        try {
-          const doc = frame.contentDocument;
-          const txt = doc && doc.body ? (doc.body.innerText || '').toLowerCase() : '';
-          // Detect Scramjet error page content and fallback to CTA creative
-          if (txt.includes('there was an error loading') || txt.includes('tls handshake eof') || txt.includes('hyper client')) {
-            renderFallback();
-          }
-        } catch (_) {
-          // Cross-origin or other access issue; leave iframe as-is
-        }
-      });
+      // No fallback: rely on iframe content (or overlay CTA) only for now
 
       slot.appendChild(frame);
       slot.appendChild(overlay);
