@@ -456,6 +456,7 @@ window.addEventListener("load", function () {
   // Expose to settings and power users to trigger ads for current session
   function triggerSupportAds() {
     clientAdBeacon();
+    renderSmartlinkBanners();
     loadAdScripts();
   }
   window.triggerSupportAds = triggerSupportAds;
@@ -537,3 +538,61 @@ document.addEventListener('click', (e) => {
   const parent = btn.closest('#ad-container-left, #ad-container-right, #ad-container-bottom');
   if (parent) parent.style.display = 'none';
 });
+
+// Render the smartlink call-to-action inside visible side banner slots
+function renderSmartlinkBanners() {
+  try {
+    const SMART_URL = 'https://www.effectivegatecpm.com/d8vbqize4?key=efe3c808c89563aff3dcaa89aabc9590';
+    const slots = [
+      document.querySelector('#ad-container-left .ad-slot'),
+      document.querySelector('#ad-container-right .ad-slot')
+    ].filter(Boolean);
+
+    slots.forEach(slot => {
+      // Clear previous content
+      while (slot.firstChild) slot.removeChild(slot.firstChild);
+
+      // Impression beacon (client-originated GET)
+      const beacon = new Image();
+      beacon.referrerPolicy = 'no-referrer';
+      beacon.alt = '';
+      beacon.decoding = 'async';
+      beacon.loading = 'eager';
+      beacon.src = SMART_URL + (SMART_URL.includes('?') ? '&' : '?') + '_=' + Date.now();
+      beacon.style.position = 'absolute';
+      beacon.style.width = '1px';
+      beacon.style.height = '1px';
+      beacon.style.opacity = '0';
+      beacon.style.pointerEvents = 'none';
+
+      // Simple creative with CTA opening via Scramjet
+      const wrap = document.createElement('div');
+      wrap.className = 'smartlink-ad';
+      const tag = document.createElement('div');
+      tag.className = 'smartlink-ad-tag';
+      tag.textContent = 'Sponsored';
+      const h = document.createElement('div');
+      h.className = 'smartlink-ad-title';
+      h.textContent = 'Support Current';
+      const p = document.createElement('div');
+      p.className = 'smartlink-ad-text';
+      p.textContent = 'Your clicks help keep it free. Thanks!';
+      const cta = document.createElement('a');
+      cta.className = 'smartlink-ad-btn';
+      cta.href = '/b/s/' + SMART_URL;
+      cta.target = '_blank';
+      cta.rel = 'noopener noreferrer';
+      cta.textContent = 'Open Offer';
+
+      wrap.appendChild(tag);
+      wrap.appendChild(h);
+      wrap.appendChild(p);
+      wrap.appendChild(cta);
+
+      slot.appendChild(wrap);
+      slot.appendChild(beacon);
+    });
+  } catch (e) {
+    console.warn('Failed to render smartlink banners:', e);
+  }
+}
