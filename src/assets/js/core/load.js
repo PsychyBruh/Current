@@ -576,6 +576,21 @@ function renderSmartlinkBanners() {
       frame.setAttribute('allow', 'fullscreen');
       frame.setAttribute('sandbox', 'allow-scripts allow-forms allow-same-origin allow-popups');
 
+      // Overlay CTA and sponsor label (visible regardless of iframe)
+      const overlay = document.createElement('div');
+      overlay.className = 'smartlink-overlay';
+      const cta = document.createElement('a');
+      cta.className = 'smartlink-ad-btn';
+      cta.href = SMART_URL_SCRAMJET;
+      cta.target = '_blank';
+      cta.rel = 'noopener noreferrer';
+      cta.textContent = 'Open Offer';
+      const sponsor = document.createElement('div');
+      sponsor.className = 'smartlink-ad-sponsor';
+      sponsor.textContent = 'Sponsored AD';
+      overlay.appendChild(cta);
+      overlay.appendChild(sponsor);
+
       let loaded = false;
       const fallbackTimer = setTimeout(() => {
         if (loaded) return;
@@ -583,25 +598,25 @@ function renderSmartlinkBanners() {
         while (slot.firstChild) slot.removeChild(slot.firstChild);
         const wrap = document.createElement('div');
         wrap.className = 'smartlink-ad';
-        const tag = document.createElement('div');
-        tag.className = 'smartlink-ad-tag';
-        tag.textContent = 'Sponsored';
         const h = document.createElement('div');
         h.className = 'smartlink-ad-title';
         h.textContent = 'Support Current';
         const p = document.createElement('div');
         p.className = 'smartlink-ad-text';
         p.textContent = 'Your clicks help keep it free. Thanks!';
-        const cta = document.createElement('a');
-        cta.className = 'smartlink-ad-btn';
-        cta.href = SMART_URL_SCRAMJET;
-        cta.target = '_blank';
-        cta.rel = 'noopener noreferrer';
-        cta.textContent = 'Open Offer';
-        wrap.appendChild(tag);
+        const cta2 = document.createElement('a');
+        cta2.className = 'smartlink-ad-btn';
+        cta2.href = SMART_URL_SCRAMJET;
+        cta2.target = '_blank';
+        cta2.rel = 'noopener noreferrer';
+        cta2.textContent = 'Open Offer';
+        const sponsor2 = document.createElement('div');
+        sponsor2.className = 'smartlink-ad-sponsor';
+        sponsor2.textContent = 'Sponsored AD';
         wrap.appendChild(h);
         wrap.appendChild(p);
-        wrap.appendChild(cta);
+        wrap.appendChild(cta2);
+        wrap.appendChild(sponsor2);
         slot.appendChild(wrap);
         slot.appendChild(beacon);
       }, 3500);
@@ -612,6 +627,7 @@ function renderSmartlinkBanners() {
       });
 
       slot.appendChild(frame);
+      slot.appendChild(overlay);
       slot.appendChild(beacon);
     });
   } catch (e) {
