@@ -519,6 +519,18 @@ document.addEventListener('DOMContentLoaded', function() {
                         <label for="prevent-closing-toggle">Prevent Closing</label>
                         <p>Prevent the tab from being closed</p>
                         <input type="checkbox" id="prevent-closing-toggle">
+
+                        <label for="support-ads-toggle">Support Current</label>
+                        <p>Enable privacy-friendly support ads to help keep Current free. You can also re-open the consent prompt.</p>
+                        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                            <div style="display:flex;align-items:center;gap:8px;">
+                                <input type="checkbox" id="support-ads-toggle">
+                                <span>Enable Support Ads</span>
+                            </div>
+                            <button id="support-prompt-open" class="data-action-btn" style="margin:0;">
+                                <i class="fa-regular fa-hand-holding-dollar"></i> Re-open Support Prompt
+                            </button>
+                        </div>
                     </div>
                     <div id="cloaking-content" class="tab-content">
                         <label for="decoy-selector">Decoy</label>
@@ -586,6 +598,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const closeSettingsBtn = document.getElementById('close-settings');
         const saveWispBtn = document.getElementById('save-wisp-url');
         const preventClosingToggle = document.getElementById('prevent-closing-toggle');
+        const supportAdsToggle = document.getElementById('support-ads-toggle');
+        const supportPromptOpen = document.getElementById('support-prompt-open');
         const wispInput = document.querySelector("#wisp-server");
         const exportDataBtn = document.getElementById('export-data-btn');
         const importDataBtn = document.getElementById('import-data-btn');
@@ -818,6 +832,32 @@ document.addEventListener('DOMContentLoaded', function() {
         createSelector('decoy', decoySelected, decoyOptions, allDecoyOptions, appSettings.decoy, 'decoy', 'decoyUpdated', 'Successfully updated Decoy!');
 
         closeSettingsBtn.addEventListener('click', window.toggleSettingsMenu);
+        if (supportAdsToggle) {
+            try {
+                const consent = localStorage.getItem('adConsent');
+                supportAdsToggle.checked = consent === 'granted';
+            } catch {}
+            supportAdsToggle.addEventListener('change', () => {
+                try {
+                    const val = supportAdsToggle.checked ? 'granted' : 'denied';
+                    localStorage.setItem('adConsent', val);
+                    localStorage.setItem('adConsentAt', Date.now().toString());
+                } catch {}
+                if (supportAdsToggle.checked && typeof window.triggerSupportAds === 'function') {
+                    window.triggerSupportAds();
+                }
+                if (typeof showToast === 'function') {
+                    showToast('success', `Support ads ${supportAdsToggle.checked ? 'enabled' : 'disabled'}.`, 'check-circle');
+                }
+            });
+        }
+        if (supportPromptOpen) {
+            supportPromptOpen.addEventListener('click', () => {
+                if (typeof window.openSupportPrompt === 'function') {
+                    window.openSupportPrompt();
+                }
+            });
+        }
         saveWispBtn.addEventListener('click', () => updateWispServerUrl(wispInput.value.trim()));
         
         document.addEventListener('decoyUpdated', (e) => applyInitialDecoy(e.detail));

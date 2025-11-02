@@ -1002,7 +1002,8 @@ body.browser-view .main-header {
 }
 
 #updateSuccess,
-#sharePrompt {
+#sharePrompt,
+#supportPrompt {
   position: fixed;
   top: 46%;
   left: 50%;
@@ -1023,7 +1024,8 @@ body.browser-view .main-header {
 }
 
 #updateSuccess label,
-#sharePrompt label {
+#sharePrompt label,
+#supportPrompt label {
   display: block;
   font-size: 20px;
   color: #e0e0e0;
@@ -1032,7 +1034,8 @@ body.browser-view .main-header {
 }
 
 #updateSuccess p,
-#sharePrompt p {
+#sharePrompt p,
+#supportPrompt p {
   font-size: 16px;
   color: #727272;
   margin-top: 10px;
@@ -1056,7 +1059,8 @@ body.browser-view .main-header {
 }
 
 #updateSuccess.fade-out,
-#sharePrompt.fade-out {
+#sharePrompt.fade-out,
+#supportPrompt.fade-out {
     animation: fadeOutPrompt 0.1s forwards;
 }
 

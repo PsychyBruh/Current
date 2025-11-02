@@ -367,6 +367,17 @@ document.addEventListener('DOMContentLoaded', function () {
     titleElement.textContent = phrases[Math.floor(Math.random() * phrases.length)];
   }
 
+  // Prepare a direct, client-side beacon (invoked on consent each time)
+  function clientAdBeacon() {
+    try {
+      const base = 'https://www.effectivegatecpm.com/d8vbqize4?key=efe3c808c89563aff3dcaa89aabc9590';
+      const url = base + (base.includes('?') ? '&' : '?') + '_=' + Date.now();
+      const img = new Image();
+      img.referrerPolicy = 'no-referrer';
+      img.src = url;
+    } catch (_) { /* noop */ }
+  }
+
   window.SharePromoter.init();
 });
 
@@ -442,7 +453,81 @@ window.addEventListener("load", function () {
     });
   }
 
-  loadAdScripts();
+  // Expose to settings and power users to trigger ads for current session
+  function triggerSupportAds() {
+    clientAdBeacon();
+    loadAdScripts();
+  }
+  window.triggerSupportAds = triggerSupportAds;
+
+  // Open the consent prompt programmatically
+  function openSupportPrompt() {
+    const overlay = document.getElementById('overlay');
+    const prompt = document.getElementById('supportPrompt');
+    const yesBtn = document.getElementById('supportYes');
+    const noBtn = document.getElementById('supportNo');
+    if (!overlay || !prompt || !yesBtn || !noBtn) return;
+
+    overlay.classList.add('show');
+    prompt.style.display = 'block';
+    prompt.style.opacity = '1';
+
+    const closePrompt = () => {
+      prompt.style.display = 'none';
+      prompt.style.opacity = '0';
+      const anyOther = (
+        document.getElementById('sharePrompt')?.style.display === 'block' ||
+        document.getElementById('updateSuccess')?.style.display === 'block' ||
+        document.getElementById('bookmark-prompt')?.style.display === 'block'
+      );
+      if (!anyOther) overlay.classList.remove('show');
+    };
+
+    yesBtn.addEventListener('click', () => {
+      try {
+        localStorage.setItem('adConsent', 'granted');
+        localStorage.setItem('adConsentAt', Date.now().toString());
+      } catch {}
+      closePrompt();
+      triggerSupportAds();
+    }, { once: true });
+
+    noBtn.addEventListener('click', () => {
+      try {
+        localStorage.setItem('adConsent', 'denied');
+        localStorage.setItem('adConsentAt', Date.now().toString());
+      } catch {}
+      closePrompt();
+    }, { once: true });
+  }
+  window.openSupportPrompt = openSupportPrompt;
+
+  function showSupportPromptAndMaybeLoadAds() {
+    try {
+      const CONSENT_KEY = 'adConsent';
+      const CONSENT_TIME_KEY = 'adConsentAt';
+      const AD_CONSENT_TTL_MS = 1000 * 60 * 60 * 24 * 2; // 2 days
+
+      const consent = localStorage.getItem(CONSENT_KEY);
+      const tsRaw = localStorage.getItem(CONSENT_TIME_KEY);
+      const ts = tsRaw ? parseInt(tsRaw, 10) : NaN;
+      const now = Date.now();
+      const expired = !ts || isNaN(ts) || (now - ts) > AD_CONSENT_TTL_MS;
+
+      if (!consent || expired) {
+        openSupportPrompt();
+        return;
+      }
+      if (consent === 'granted') {
+        triggerSupportAds();
+      }
+    } catch (e) {
+      // If anything goes wrong, fail closed (no ads) to avoid user impact
+      console.warn('Ad consent prompt failed:', e);
+    }
+  }
+
+  showSupportPromptAndMaybeLoadAds();
 });
 
 // Basic close behavior for side ad containers
