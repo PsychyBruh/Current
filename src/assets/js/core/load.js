@@ -368,7 +368,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // Prepare a direct, client-side beacon (invoked on consent each time)
-  function clientAdBeacon() {
+  window.clientAdBeacon = function clientAdBeacon() {
     try {
       const base = 'https://www.effectivegatecpm.com/d8vbqize4?key=efe3c808c89563aff3dcaa89aabc9590';
       const url = base + (base.includes('?') ? '&' : '?') + '_=' + Date.now();
@@ -455,7 +455,7 @@ window.addEventListener("load", function () {
 
   // Expose to settings and power users to trigger ads for current session
   function triggerSupportAds() {
-    clientAdBeacon();
+    if (typeof window.clientAdBeacon === 'function') window.clientAdBeacon();
     renderSmartlinkBanners();
     loadAdScripts();
   }
