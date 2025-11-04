@@ -232,10 +232,12 @@ const steps = [
                 'assets/js/core/load.js',
                 'assets/js/features/settings.js',
                 'assets/js/features/games.js',
+                'assets/js/features/games-home.js',
                 'assets/js/features/shortcuts.js',
                 'assets/js/features/toast.js',
                 'assets/css/settings.css',
                 'assets/css/games.css',
+                'assets/css/games-home.css',
                 'assets/css/toast.css'
             ];
 

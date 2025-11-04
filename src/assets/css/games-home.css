@@ -1,0 +1,126 @@
+.games-home {
+  margin: 20px auto;
+  max-width: 1200px;
+  padding: 0 16px 40px;
+}
+
+.games-home-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.games-home-title {
+  color: #e0e0e0;
+  font-size: 22px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.games-home-search {
+  position: relative;
+}
+
+.games-home-search input[type="text"] {
+  padding: 12px 14px 12px 36px;
+  width: 320px;
+  max-width: 60vw;
+  border: 2px solid #00000000;
+  background-color: #0e0e0e;
+  outline: none;
+  border-radius: 12px;
+  color: #b9b9b9;
+  font-size: 14px;
+  transition: background-color 0.15s ease;
+}
+
+.games-home-search input[type="text"]:focus,
+.games-home-search input[type="text"]:hover {
+  background-color: #1d1d1d;
+}
+
+.games-home-search .fa-magnifying-glass {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #ffffff69;
+  font-size: 16px;
+  pointer-events: none;
+}
+
+.games-home-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 14px;
+}
+
+.games-home .game-card {
+  background-color: #141414;
+  border-radius: 12px;
+  padding: 10px;
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.games-home .game-card:hover {
+  background-color: #202020;
+  transform: translateY(-2px);
+}
+
+.games-home .game-image {
+  width: 100%;
+  height: 160px;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.games-home .game-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.games-home .game-info {
+  min-height: 44px;
+}
+
+.games-home .game-info h2 {
+  color: #e0e0e0;
+  font-size: 14px;
+  margin: 0 0 4px 0;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.games-home .game-description {
+  color: #808080;
+  font-size: 12px;
+  margin: 0;
+}
+
+.games-home-credits {
+  color: #808080;
+  font-size: 12px;
+  text-align: center;
+  margin-top: 16px;
+}
+
+.games-home-status {
+  color: #b1b1b1;
+  text-align: center;
+  margin: 20px 0;
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .games-home .game-image { height: 140px; }
+  .games-home-grid { gap: 10px; }
+}
+

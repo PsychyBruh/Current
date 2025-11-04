@@ -10,6 +10,7 @@
     <link rel="preload" href="/assets/css/vendors/font-awesome/css/all.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
     <link rel="preload" href="/assets/css/settings.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
     <link rel="preload" href="/assets/css/games.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="preload" href="/assets/css/games-home.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
     <link rel="preload" href="/assets/css/toast.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
     <link rel="preload" href="/assets/css/vendors/nprogress/nprogress.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
     <noscript>
@@ -127,9 +128,7 @@
             <a href="https://discord.gg/7Qh7qWs6Du" target="_blank" id="discord" class="icon-btn" title="Join the server!">
                 <i class="fa-brands fa-discord"></i>
             </a>
-            <a href="#" id="games" class="icon-btn" title="Games">
-                <i class="fa-solid fa-gamepad-modern"></i>
-            </a>
+            <!-- Games icon hidden: homepage shows games catalog -->
         </div>
 
         <div id="right-top-icons">
@@ -166,7 +165,7 @@
             </div>
         </div>
         <div id="erudaLoadingScreen" style="display:none">Eruda is loading...</div>
-        <div id="bookmarks-container">
+        <div id="bookmarks-container" style="display:none;">
             <div class="bookmarks-header">
                 <h3 id="bookmarks-title">Bookmarks</h3>
                 <button id="bookmarks-edit-toggle">Edit</button>
@@ -179,7 +178,7 @@
                 </ul>
             </div>
         </div>
-        <div id="games-menu" class="games-menu">
+        <div id="games-menu" class="games-menu" style="display:none;">
             <div class="games-menu-content">
                 <button id="close-games-menu">
                     <i class="fa-solid fa-times"></i>
@@ -221,11 +220,24 @@
             <p>If you don’t see changes or the site breaks, do Ctrl + Shift + R a few times.</p>
             <button class="prompt-close-btn" id="updateSuccessClose">Okay</button>
         </div>
+        <section id="games-home" class="games-home">
+            <div class="games-home-header">
+                <h2 class="games-home-title">Explore Games</h2>
+                <div class="games-home-search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="gamesHomeSearchInput" placeholder="Search games…" autocomplete="off" />
+                </div>
+            </div>
+            <p id="gamesHomeStatus" class="games-home-status"></p>
+            <div id="gamesHomeGrid" class="games-home-grid"></div>
+            <div id="gamesHomeCredits" class="games-home-credits">All credits to GN-Math for the games</div>
+        </section>
         <div id="iframe-container"></div>
         <div id="disclaimer">
             <a><strong>Disclaimer</strong>: Current doesn't host any files. Legal issues should be taken up with the 3rd party provider</a>
         </div>
         <script src="/assets/js/features/games.js" defer></script>
+        <script src="/assets/js/features/games-home.js" defer></script>
         <script src="/assets/js/features/shortcuts.js" defer></script>
         <script src="/assets/js/features/toast.js" defer></script>
         <script src="/assets/js/vendors/nprogress/nprogress.js" defer></script>
