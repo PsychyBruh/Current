@@ -121,20 +121,13 @@
         </div>
 
         <div id="left-icons">
-            <div id="branding-container" class="icon-btn">
-                <span id="waves">Current!</span>
-                <div id="oneko"></div>
-            </div>
-            <a href="https://discord.gg/7Qh7qWs6Du" target="_blank" id="discord" class="icon-btn" title="Join the server!">
-                <i class="fa-brands fa-discord"></i>
-            </a>
-            <!-- Games icon hidden: homepage shows games catalog -->
+            <!-- Left icons hidden for full-screen games layout -->
+            <div id="branding-container" class="icon-btn" style="display:none;"></div>
         </div>
 
         <div id="right-top-icons">
-            <a href="#" id="settings" class="icon-btn" title="Settings">
-                <i class="settings fa-regular fa-gear"></i>
-            </a>
+            <span id="waves">Current Games</span>
+            <div id="oneko"></div>
         </div>
 
 
@@ -153,17 +146,7 @@
             <span class="ad-label">Ad 220×420</span>
         </div>
     </div>
-        <div class="main-container">
-            <div class="search-title">----</div>
-            <div class="search-bar">
-                <div class="light-border"></div>
-                <div class="light-inset-bg"></div>
-                <div class="light"></div>
-                <i style="position: absolute; z-index: 4; top: 50%; margin-left: -10px; transform: translateY(-50%); font-size: 18px; color: #ffffff69; pointer-events: none;" class="fa-regular fa-magnifying-glass"></i>
-                <input class="waves" type="text" id="searchInput" placeholder="Have anything in mind?" autocomplete="off">
-                <span class="shortcut-indicator">Ctrl + E</span>
-            </div>
-        </div>
+        <!-- Removed search hero for full-screen games layout -->
         <div id="erudaLoadingScreen" style="display:none">Eruda is loading...</div>
         <div id="bookmarks-container" style="display:none;">
             <div class="bookmarks-header">
@@ -178,27 +161,7 @@
                 </ul>
             </div>
         </div>
-        <div id="games-menu" class="games-menu" style="display:none;">
-            <div class="games-menu-content">
-                <button id="close-games-menu">
-                    <i class="fa-solid fa-times"></i>
-                </button>
-                <div class="games-menu-header">
-                    <h2>Games</h2>
-                </div>
-                <i style="position: absolute; top: 85px; z-index: 9999; margin-left: 3px; transform: translateY(-50%); font-size: 18px; color: #ffffff69; pointer-events: none;" class="fa-solid fa-magnifying-glass"></i>
-                <div class="games-search-bar" style="position:relative;">
-                    <input type="text" id="gamesSearchInput" placeholder="Search for games..." autocomplete="off">
-                </div>
-                <div class="games-grid-container">
-                    <div class="games-grid"></div>
-                    <div id="gamesSentinel" class="games-sentinel"></div>
-                </div>
-                <div class="games-credits">
-                    All credits to GN-Math for the games
-                </div>
-            </div>
-        </div>
+        <!-- Removed modal games menu; homepage is the games view -->
         <div id="bookmark-prompt" class="popup" style="display:none;">
             <div class="input-container">
                 <label for="bookmarkName">Bookmark Name:</label>
@@ -221,16 +184,7 @@
             <button class="prompt-close-btn" id="updateSuccessClose">Okay</button>
         </div>
         <section id="games-home" class="games-home">
-            <div class="games-home-header">
-                <h2 class="games-home-title">Explore Games</h2>
-                <div class="games-home-search">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="gamesHomeSearchInput" placeholder="Search games…" autocomplete="off" />
-                </div>
-            </div>
-            <p id="gamesHomeStatus" class="games-home-status"></p>
             <div id="gamesHomeGrid" class="games-home-grid"></div>
-            <div id="gamesHomeCredits" class="games-home-credits">All credits to GN-Math for the games</div>
         </section>
         <div id="iframe-container"></div>
         <div id="disclaimer">

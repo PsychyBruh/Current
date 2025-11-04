@@ -1,7 +1,11 @@
 .games-home {
-  margin: 20px auto;
-  max-width: 1200px;
-  padding: 0 16px 40px;
+  position: relative;
+  margin: 0;
+  width: 100%;
+  height: 100vh;
+  padding: 24px;
+  box-sizing: border-box;
+  overflow: auto;
 }
 
 .games-home-header {
@@ -52,8 +56,8 @@
 
 .games-home-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
 }
 
 .games-home .game-card {
@@ -73,7 +77,7 @@
 
 .games-home .game-image {
   width: 100%;
-  height: 160px;
+  height: 180px;
   border-radius: 10px;
   overflow: hidden;
   margin-bottom: 8px;
@@ -121,6 +125,5 @@
 
 @media (max-width: 640px) {
   .games-home .game-image { height: 140px; }
-  .games-home-grid { gap: 10px; }
+  .games-home-grid { gap: 12px; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
 }
-
