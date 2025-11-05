@@ -128,9 +128,23 @@ document.addEventListener('DOMContentLoaded', () => {
       const url = card.dataset.gameUrl;
       const isExternal = card.dataset.isExternal === 'true';
       if (!url) return;
-      if (isExternal) window.open(url, '_blank');
-      else if (window.WavesApp?.handleSearch) window.WavesApp.handleSearch(url);
+
+      if (isExternal) {
+        window.open(url, '_blank');
+        return;
+      }
+
+      if (window.WavesApp?.handleSearch) {
+        window.WavesApp.handleSearch(url);
+      }
+
+      // Attempt to enter fullscreen on user gesture for best immersion
+      try {
+        const activeTab = window.WavesApp?.getActiveTab?.();
+        const el = activeTab?.iframe || document.documentElement;
+        if (el?.requestFullscreen) el.requestFullscreen().catch(() => {});
+        else if (el?.webkitRequestFullscreen) el.webkitRequestFullscreen();
+      } catch {}
     });
   }
 });
-

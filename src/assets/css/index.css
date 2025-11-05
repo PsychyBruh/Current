@@ -145,6 +145,11 @@ body.browser-view #iframe-container {
     height: 100%;
 }
 
+/* Hide the homepage games grid when in browser (game) view */
+body.browser-view #games-home {
+    display: none;
+}
+
 body.browser-view .content-wrapper {
     margin-left: 0;
 }
