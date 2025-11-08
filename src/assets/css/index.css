@@ -1080,11 +1080,13 @@ body.browser-view .main-header {
 }
 
 #bookmarks-container {
-    margin-top: -55px;
+    margin-top: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
+    position: relative;
+    z-index: 21;
 }
 
 .bookmarks-header {
