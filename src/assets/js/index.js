@@ -19,6 +19,23 @@ function handleServiceWorkerMessage(event) {
             }
         }
     }
+    // Detect transport-level failures (e.g., epoxy TLS handshake issues) and auto-fallback to libcurl
+    if (data && data.type === 'transport-error') {
+        try {
+            const errMsg = String(data.error || '').toLowerCase();
+            const currentTransport = (localStorage.getItem('transport') || 'epoxy').toLowerCase();
+            const candidateUrl = data.target || data.url || '';
+            // Common epoxy failure signature: "tls handshake eof" or Hyper client errors
+            const isTlsHandshakeFailure = /tls\s*handshake|unexpectedeof|unexpected\s*eof|hyper\s*client/.test(errMsg);
+            if (isTlsHandshakeFailure && currentTransport === 'epoxy' && candidateUrl) {
+                try { localStorage.setItem('retryAfterTransportSwitch', candidateUrl); } catch (_) {}
+                // Ask connection manager to switch transports; it will reload on success
+                document.dispatchEvent(new CustomEvent('newTransport', { detail: 'libcurl' }));
+            }
+        } catch (e) {
+            console.warn('Failed to process transport-error message', e);
+        }
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -440,5 +457,24 @@ document.addEventListener('DOMContentLoaded', () => {
             showHomeView();
             if (dom.searchInputMain) dom.searchInputMain.disabled = false;
         }
+
+        // If a previous page asked us to switch transports due to a handshake error,
+        // resume navigation to the original target once we're loaded.
+        try {
+            const pending = localStorage.getItem('retryAfterTransportSwitch');
+            if (pending) {
+                // Give the connection manager a brief moment to finish reinitialization
+                setTimeout(() => {
+                    try {
+                        const tab = getActiveTab();
+                        if (tab) {
+                            window.WavesApp.handleSearch(pending);
+                        }
+                    } finally {
+                        localStorage.removeItem('retryAfterTransportSwitch');
+                    }
+                }, 500);
+            }
+        } catch (_) {}
     });
 });

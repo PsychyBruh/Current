@@ -72,6 +72,22 @@ self.addEventListener("fetch", (event) => {
             return networkResponse;
 
         } catch (err) {
+            try {
+                // Surface transport-level failures to the page so it can react (e.g., switch transports)
+                const clients = await self.clients.matchAll();
+                const msg = (err && (err.message || err.toString())) || 'unknown error';
+                let originalUrl = request.url;
+                let targetUrl = null;
+                try {
+                    const u = new URL(originalUrl);
+                    if (u.pathname.startsWith('/b/s/')) {
+                        targetUrl = decodeURIComponent(u.pathname.slice('/b/s/'.length) + u.search + u.hash);
+                    }
+                } catch (_) {}
+                for (const c of clients) {
+                    c.postMessage({ type: 'transport-error', error: msg, url: originalUrl, target: targetUrl });
+                }
+            } catch (_) {}
             console.error('SW fetch error:', err);
             return fetch(request);
         }
