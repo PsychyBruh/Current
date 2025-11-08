@@ -130,14 +130,16 @@
         </div>
 
         <div id="left-icons">
-            <!-- Left icons hidden for full-screen games layout -->
-            <div id="branding-container" class="icon-btn" style="display:none;"></div>
+            <div id="branding-container" class="icon-btn">
+                <span id="current">Current!</span>
+                <div id="oneko"></div>
+            </div>
+            <a href="#" id="games" class="icon-btn" title="Games">
+                <i class="fa-solid fa-gamepad-modern"></i>
+            </a>
         </div>
 
-        <div id="right-top-icons">
-            <span id="waves">Current Games</span>
-            <div id="oneko"></div>
-        </div>
+        <div id="right-top-icons"></div>
 
 
     <div id="settings-menu" class="settings-menu"></div>
@@ -155,7 +157,18 @@
             <span class="ad-label">Ad 220×420</span>
         </div>
     </div>
-        <!-- Removed search hero for full-screen games layout -->
+        <!-- Regular home search hero -->
+        <div class="main-container">
+            <div class="search-title">----</div>
+            <div class="search-bar">
+                <div class="light-border"></div>
+                <div class="light-inset-bg"></div>
+                <div class="light"></div>
+                <i style="position: absolute; z-index: 4; top: 50%; margin-left: -10px; transform: translateY(-50%); font-size: 18px; color: #ffffff69; pointer-events: none;" class="fa-regular fa-magnifying-glass"></i>
+                <input class="waves" type="text" id="searchInput" placeholder="Have anything in mind?" autocomplete="off">
+                <span class="shortcut-indicator">Ctrl + E</span>
+            </div>
+        </div>
         <div id="erudaLoadingScreen" style="display:none">Eruda is loading...</div>
         <div id="bookmarks-container" style="display:none;">
             <div class="bookmarks-header">
