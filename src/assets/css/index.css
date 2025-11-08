@@ -154,6 +154,11 @@ body.browser-view .content-wrapper {
     margin-left: 0;
 }
 
+/* Home mode toggle between regular home and games home */
+#games-home { display: none; }
+body.games-home-active #games-home { display: block; }
+body.games-home-active .main-container { display: none; }
+
 ::selection {
     background-color: #ffffff;
     color: #000000;
@@ -1008,7 +1013,8 @@ body.browser-view .main-header {
 
 #updateSuccess,
 #sharePrompt,
-#supportPrompt {
+#supportPrompt,
+#modePrompt {
   position: fixed;
   top: 46%;
   left: 50%;
@@ -1030,7 +1036,8 @@ body.browser-view .main-header {
 
 #updateSuccess label,
 #sharePrompt label,
-#supportPrompt label {
+#supportPrompt label,
+#modePrompt label {
   display: block;
   font-size: 20px;
   color: #e0e0e0;
@@ -1040,7 +1047,8 @@ body.browser-view .main-header {
 
 #updateSuccess p,
 #sharePrompt p,
-#supportPrompt p {
+#supportPrompt p,
+#modePrompt p {
   font-size: 16px;
   color: #727272;
   margin-top: 10px;
@@ -1065,7 +1073,8 @@ body.browser-view .main-header {
 
 #updateSuccess.fade-out,
 #sharePrompt.fade-out,
-#supportPrompt.fade-out {
+#supportPrompt.fade-out,
+#modePrompt.fade-out {
     animation: fadeOutPrompt 0.1s forwards;
 }
 

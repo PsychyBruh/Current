@@ -480,4 +480,22 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } catch (_) {}
     });
+
+    // Top-left Games button: switch to games home screen
+    const gamesBtn = document.getElementById('games');
+    if (gamesBtn) {
+        gamesBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.body.classList.remove('browser-view');
+            document.body.classList.add('games-home-active');
+        });
+    }
+
+    // Games Home → Home button
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('#gamesHomeToHome');
+        if (!btn) return;
+        document.body.classList.remove('browser-view');
+        document.body.classList.remove('games-home-active');
+    });
 });

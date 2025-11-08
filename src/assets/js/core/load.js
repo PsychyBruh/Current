@@ -548,3 +548,45 @@ function renderSmartlinkBanners() {
     console.warn('Failed to render smartlink banners:', e);
   }
 }
+
+// Mode prompt: choose between Games and Web Search on app open
+window.addEventListener('load', function() {
+  try {
+    const overlay = document.getElementById('overlay');
+    const prompt = document.getElementById('modePrompt');
+    const chooseGames = document.getElementById('chooseGames');
+    const chooseSearch = document.getElementById('chooseSearch');
+    if (!overlay || !prompt || !chooseGames || !chooseSearch) return;
+
+    function closePrompt() {
+      prompt.style.display = 'none';
+      prompt.style.opacity = '0';
+      // do not hide overlay if other modals are open
+      const anyOther = (
+        document.getElementById('sharePrompt')?.style.display === 'block' ||
+        document.getElementById('updateSuccess')?.style.display === 'block' ||
+        document.getElementById('bookmark-prompt')?.style.display === 'block' ||
+        document.getElementById('supportPrompt')?.style.display === 'block'
+      );
+      if (!anyOther) overlay.classList.remove('show');
+    }
+
+    // Always show at app open
+    overlay.classList.add('show');
+    prompt.style.display = 'block';
+    prompt.style.opacity = '1';
+
+    chooseGames.addEventListener('click', () => {
+      document.body.classList.remove('browser-view');
+      document.body.classList.add('games-home-active');
+      closePrompt();
+    }, { once: true });
+    chooseSearch.addEventListener('click', () => {
+      document.body.classList.remove('browser-view');
+      document.body.classList.remove('games-home-active');
+      closePrompt();
+    }, { once: true });
+  } catch (e) {
+    console.warn('Mode prompt failed:', e);
+  }
+});

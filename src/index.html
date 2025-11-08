@@ -80,6 +80,15 @@
         <p>Please think about sharing this site with your friends because it helps keep the site running smoothly! Thanks! </p>
         <button class="prompt-close-btn" id="sharePromptClose">Okay</button>
     </div>
+    <div id="modePrompt" style="display:none;">
+        <i class="fa-regular fa-gamepad-modern" style="font-size:40px;margin-bottom:15px;"></i>
+        <label>What do you want to do?</label>
+        <p>Play Games to browse the catalog, or choose Web Search for the regular homepage.</p>
+        <div style="display:flex;justify-content:center;gap:10px;margin-top:8px;">
+            <button class="prompt-close-btn" id="chooseGames">Play Games</button>
+            <button class="prompt-close-btn" id="chooseSearch" style="background-color:#0f0f0f;color:#fff" onmouseover='this.style.backgroundColor="#1f1f1f"' onmouseout='this.style.backgroundColor="#0f0f0f"'>Web Search</button>
+        </div>
+    </div>
     <div id="supportPrompt" style="display:none;">
         <i class="fa-regular fa-hand-holding-dollar" style="font-size:40px;margin-bottom:15px;"></i>
         <label>Support Current?</label>
@@ -184,7 +193,21 @@
             <button class="prompt-close-btn" id="updateSuccessClose">Okay</button>
         </div>
         <section id="games-home" class="games-home">
+            <div class="games-home-header">
+                <h1 class="games-home-title">Current Games</h1>
+                <div class="games-home-actions">
+                    <button id="gamesHomeToHome" class="data-action-btn" style="margin:0;">
+                        <i class="fa-regular fa-house"></i> Home
+                    </button>
+                </div>
+            </div>
+            <div class="games-home-search">
+                <i class="fa-regular fa-magnifying-glass"></i>
+                <input type="text" id="gamesHomeSearchInput" placeholder="Search games..." autocomplete="off" />
+            </div>
+            <div id="gamesHomeStatus" class="games-home-status"></div>
             <div id="gamesHomeGrid" class="games-home-grid"></div>
+            <div id="gamesHomeCredits" class="games-home-credits">All credits to GN‑Math for the games</div>
         </section>
         <div id="iframe-container"></div>
         <div id="disclaimer">
