@@ -277,7 +277,7 @@ body.games-home-active #bookmarks-container { display: none; }
     margin: 0 !important; 
 }
 
-#waves {
+#waves, #current {
     font-size: 20px;
     color: #ffffff;
     display: inline-block;
@@ -288,6 +288,20 @@ body.games-home-active #bookmarks-container { display: none; }
     font-family: 'Jersey 10';
     font-weight: 200;
     transition: all 0.1s ease;
+}
+
+/* Subtle home button styling to blend with branding */
+.subtle-home {
+    border: 1px solid #ffffff10;
+    background-color: #0a0a0a;
+    width: 28px;
+    height: 28px;
+    padding: 6px;
+    border-radius: 10px;
+}
+.subtle-home:hover {
+    background-color: #121212;
+    border-color: #ffffff22;
 }
 
 .navbar .favicon {

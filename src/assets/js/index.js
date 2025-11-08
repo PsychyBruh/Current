@@ -491,11 +491,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Games Home → Home button
-    document.addEventListener('click', (e) => {
-        const btn = e.target.closest('#gamesHomeToHome');
-        if (!btn) return;
-        document.body.classList.remove('browser-view');
-        document.body.classList.remove('games-home-active');
-    });
+    // Home switch button next to branding
+    const homeSwitchBtn = document.getElementById('homeSwitchBtn');
+    if (homeSwitchBtn) {
+        homeSwitchBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.body.classList.remove('browser-view');
+            document.body.classList.remove('games-home-active');
+        });
+    }
 });
