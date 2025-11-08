@@ -23,7 +23,11 @@
 }
 
 .games-home-search {
-  position: relative;
+  position: sticky;
+  top: 12px;
+  width: fit-content;
+  margin: 8px auto 16px;
+  z-index: 3;
 }
 
 .games-home-search input[type="text"] {
