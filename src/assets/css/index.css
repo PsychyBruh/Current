@@ -158,6 +158,7 @@ body.browser-view .content-wrapper {
 #games-home { display: none; }
 body.games-home-active #games-home { display: block; }
 body.games-home-active .main-container { display: none; }
+body.games-home-active #bookmarks-container { display: none; }
 
 ::selection {
     background-color: #ffffff;
