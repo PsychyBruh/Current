@@ -4,10 +4,12 @@ import { initializeUI, hideLoadingScreen, showHomeView, showBrowserView } from '
 import { initializeIframe, updateHistoryUI } from './core/iframe.js';
 import { initializeSearch, handleSearch as performSearch } from './search/search.js';
 import { initializeBookmarks } from './features/bookmarks.js';
+import './features/devpanel.js';
 
 function handleServiceWorkerMessage(event) {
     const { data } = event;
     if (data && data.type === 'url-update' && data.url) {
+        try { window.DevPanel && window.DevPanel.info && window.DevPanel.info('[SW] url-update', data.url); } catch {}
         const activeTab = window.WavesApp.getActiveTab();
         
         if (activeTab && activeTab.historyManager) {
@@ -22,6 +24,7 @@ function handleServiceWorkerMessage(event) {
     // Detect transport-level failures (e.g., epoxy TLS handshake issues) and auto-fallback to libcurl
     if (data && data.type === 'transport-error') {
         try {
+            try { window.DevPanel && window.DevPanel.error && window.DevPanel.error('[SW] transport-error', data.error, data.target || data.url); } catch {}
             const errMsg = String(data.error || '').toLowerCase();
             const currentTransport = (localStorage.getItem('transport') || 'epoxy').toLowerCase();
             const candidateUrl = data.target || data.url || '';
