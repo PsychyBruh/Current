@@ -165,6 +165,21 @@ function setupIframeContentListeners(iframe, historyManager) {
             updateTabDetails(iframe);
         };
         iframeWindow.addEventListener('DOMContentLoaded', iframeWindow.__domContentLoadedHandler);
+
+        // Forward Ctrl+Shift+P from the game iframe to parent to toggle DevPanel
+        try {
+            iframeWindow.removeEventListener('keydown', iframeWindow.__devpanelKeyHandler, true);
+        } catch {}
+        iframeWindow.__devpanelKeyHandler = (evt) => {
+            try {
+                const isCtrl = evt.ctrlKey || evt.metaKey; // support Cmd on macOS
+                if (isCtrl && evt.shiftKey && String(evt.key || '').toLowerCase() === 'p') {
+                    window.parent.postMessage({ type: 'toggle-devpanel' }, '*');
+                    evt.preventDefault();
+                }
+            } catch {}
+        };
+        iframeWindow.addEventListener('keydown', iframeWindow.__devpanelKeyHandler, true);
         
     } catch (e) {
         console.warn("Could not attach listeners to iframe content. Likely transient state or cross-origin.");

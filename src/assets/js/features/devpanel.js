@@ -310,3 +310,11 @@
   };
 })();
 
+// Allow toggling from child iframes via postMessage (Ctrl+Shift+P forwarded)
+try {
+  window.addEventListener('message', (e) => {
+    if (e && e.data && e.data.type === 'toggle-devpanel') {
+      try { window.DevPanel && window.DevPanel.toggle && window.DevPanel.toggle(); } catch {}
+    }
+  });
+} catch {}

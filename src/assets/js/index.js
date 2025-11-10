@@ -21,24 +21,7 @@ function handleServiceWorkerMessage(event) {
             }
         }
     }
-    // Detect transport-level failures (e.g., epoxy TLS handshake issues) and auto-fallback to libcurl
-    if (data && data.type === 'transport-error') {
-        try {
-            try { window.DevPanel && window.DevPanel.error && window.DevPanel.error('[SW] transport-error', data.error, data.target || data.url); } catch {}
-            const errMsg = String(data.error || '').toLowerCase();
-            const currentTransport = (localStorage.getItem('transport') || 'epoxy').toLowerCase();
-            const candidateUrl = data.target || data.url || '';
-            // Common epoxy failure signature: "tls handshake eof" or Hyper client errors
-            const isTlsHandshakeFailure = /tls\s*handshake|unexpectedeof|unexpected\s*eof|hyper\s*client/.test(errMsg);
-            if (isTlsHandshakeFailure && currentTransport === 'epoxy' && candidateUrl) {
-                try { localStorage.setItem('retryAfterTransportSwitch', candidateUrl); } catch (_) {}
-                // Ask connection manager to switch transports; it will reload on success
-                document.dispatchEvent(new CustomEvent('newTransport', { detail: 'libcurl' }));
-            }
-        } catch (e) {
-            console.warn('Failed to process transport-error message', e);
-        }
-    }
+    // Removed auto-fallback to libcurl to avoid incompatibilities with chunked/encoded responses
 }
 
 document.addEventListener('DOMContentLoaded', () => {
