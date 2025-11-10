@@ -318,11 +318,11 @@ try {
     try {
       const level = (d.level || 'log');
       const args = Array.isArray(d.args) ? d.args : [String(d.args)];
+      const prefix = d.source ? `[${d.source}]` : '';
       if (window.DevPanel && typeof window.DevPanel[level] === 'function') {
-        // Call underlying addLog through exposed API by level
-        window.DevPanel[level](...args);
+        window.DevPanel[level](prefix, ...args);
       } else if (window.DevPanel && window.DevPanel.log) {
-        window.DevPanel.log(...args);
+        window.DevPanel.log(prefix, ...args);
       }
     } catch {}
   });
