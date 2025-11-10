@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 description: 'By Cloud',
                                 coverUrl: '/assets/images/clash.jpg',
                                 gameUrl: 'https://www.easyfun.gg/cloud-games/clash-royale-cloud-online.html',
-                                isExternal: true,
+                                isExternal: false,
                                 featured: true,
                             },
                             {
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 description: 'By Cloud',
                                 coverUrl: '/assets/images/roblox.jpg',
                                 gameUrl: 'https://www.easyfun.gg/cloud-games/roblox.html',
-                                isExternal: true,
+                                isExternal: false,
                                 featured: true,
                             },
                         ];
