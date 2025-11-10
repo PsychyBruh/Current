@@ -180,6 +180,45 @@ function setupIframeContentListeners(iframe, historyManager) {
             } catch {}
         };
         iframeWindow.addEventListener('keydown', iframeWindow.__devpanelKeyHandler, true);
+
+        // Inject lightweight console/network forwarder so DevPanel receives logs from the iframe
+        try {
+            const doc = iframeWindow.document;
+            if (!doc.getElementById('devpanel-forwarder')) {
+                const s = doc.createElement('script');
+                s.id = 'devpanel-forwarder';
+                s.textContent = `(() => {
+                  try {
+                    const post = (level, args) => {
+                      try {
+                        const safe = (v) => {
+                          try { if (v && v.stack) return v.stack; if (typeof v === 'object') return JSON.stringify(v); return String(v); } catch { return '[unprintable]'; }
+                        };
+                        parent.postMessage({ type: 'devpanel-log', level, args: Array.from(args).map(safe), source: 'iframe' }, '*');
+                      } catch {}
+                    };
+                    ['log','info','warn','error','debug'].forEach(l => {
+                      const orig = console[l] || console.log;
+                      console[l] = function(...a){ try { post(l, a); } catch {} try { return orig.apply(console, a); } catch {} };
+                    });
+                    addEventListener('error', e => post('error', [e.message, (e.filename||'')+':' + (e.lineno||0)+':' + (e.colno||0)]));
+                    addEventListener('unhandledrejection', e => {
+                      const r = e && e.reason; post('error', ['UnhandledRejection:', (r && (r.stack||r.message)) || String(r)]);
+                    });
+                    if (typeof fetch === 'function') {
+                      const of = fetch; 
+                      window.fetch = function(...args){
+                        try { post('info', ['fetch ' + ((args[1]?.method||'GET').toUpperCase()) + ' ' + (typeof args[0]==='string'?args[0]:(args[0]&&args[0].url)||'')]); } catch {}
+                        const t0 = performance.now();
+                        return of.apply(this, args).then(res => { try { post('info', ['fetch -> ' + res.status + ' ' + res.statusText + ' (' + Math.round(performance.now()-t0) + 'ms)']); } catch {} return res; })
+                        .catch(err => { try { post('error', ['fetch ERR:', (err && (err.stack||err.message)) || String(err)]); } catch {} throw err; });
+                      };
+                    }
+                  } catch {}
+                })();`;
+                (doc.head || doc.documentElement || doc.body).appendChild(s);
+              }
+        } catch {}
         
     } catch (e) {
         console.warn("Could not attach listeners to iframe content. Likely transient state or cross-origin.");

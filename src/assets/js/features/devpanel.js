@@ -310,6 +310,24 @@
   };
 })();
 
+// Receive logs forwarded from child iframes and render them in the panel
+try {
+  window.addEventListener('message', (e) => {
+    const d = e && e.data;
+    if (!d || d.type !== 'devpanel-log') return;
+    try {
+      const level = (d.level || 'log');
+      const args = Array.isArray(d.args) ? d.args : [String(d.args)];
+      if (window.DevPanel && typeof window.DevPanel[level] === 'function') {
+        // Call underlying addLog through exposed API by level
+        window.DevPanel[level](...args);
+      } else if (window.DevPanel && window.DevPanel.log) {
+        window.DevPanel.log(...args);
+      }
+    } catch {}
+  });
+} catch {}
+
 // Allow toggling from child iframes via postMessage (Ctrl+Shift+P forwarded)
 try {
   window.addEventListener('message', (e) => {
