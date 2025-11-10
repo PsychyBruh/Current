@@ -31,6 +31,19 @@ self.addEventListener("fetch", (event) => {
 
     event.respondWith((async () => {
         try {
+            // Guard: prevent failed proxy attempts to localhost/loopback from breaking pages
+            // Example failing requests: /b/s/http%3A%2F%2Flocalhost%3A33445%2Fhello => 500/libcurl code 52
+            if (url.pathname.startsWith('/b/s/')) {
+                try {
+                    const original = decodeURIComponent(url.pathname.slice(5)); // strip '/b/s/'
+                    const originalUrl = new URL(original);
+                    const h = originalUrl.hostname.toLowerCase();
+                    const isLoopback = h === 'localhost' || h === '127.0.0.1' || h === '::1' || h === '0.0.0.0';
+                    if (isLoopback) {
+                        return new Response('', { status: 204 });
+                    }
+                } catch (_) {}
+            }
             if (!scramjetConfigLoaded) {
                 await scramjet.loadConfig();
                 scramjetConfigLoaded = true;
