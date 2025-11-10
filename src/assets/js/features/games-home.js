@@ -42,6 +42,37 @@ document.addEventListener('DOMContentLoaded', () => {
       })
       .then(zones => {
         allGames = mapZonesToGames(zones);
+        // Prepend custom cloud games (Clash Royale, Roblox) to appear at the top
+        try {
+          const customGames = [
+            {
+              id: 'custom-clash-royale',
+              name: 'Clash Royale',
+              author: 'Cloud',
+              description: 'By Cloud',
+              coverUrl: '/assets/images/clash.jpg',
+              gameUrl: 'https://www.easyfun.gg/cloud-games/clash-royale-cloud-online.html',
+              isExternal: true,
+              featured: true,
+            },
+            {
+              id: 'custom-roblox',
+              name: 'Roblox',
+              author: 'Cloud',
+              description: 'By Cloud',
+              coverUrl: '/assets/images/roblox.jpg',
+              gameUrl: 'https://www.easyfun.gg/cloud-games/roblox.html',
+              isExternal: true,
+              featured: true,
+            },
+          ];
+          for (let i = customGames.length - 1; i >= 0; i--) {
+            const g = customGames[i];
+            if (!allGames.some(x => (x.name || '').toLowerCase() === g.name.toLowerCase())) {
+              allGames.unshift(g);
+            }
+          }
+        } catch (_) {}
         if (window.WavesApp) {
           window.WavesApp.allGames = allGames; // share cache with rest of app
         }

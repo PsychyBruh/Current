@@ -48,6 +48,39 @@ document.addEventListener('DOMContentLoaded', () => {
                             };
                         })
                         .filter(game => !game.name.startsWith('[!]') && !game.name.startsWith('Chat Bot'));
+
+                    // Prepend custom cloud games at the very top (Clash Royale, Roblox)
+                    try {
+                        const customGames = [
+                            {
+                                id: 'custom-clash-royale',
+                                name: 'Clash Royale',
+                                author: 'Cloud',
+                                description: 'By Cloud',
+                                coverUrl: '/assets/images/clash.jpg',
+                                gameUrl: 'https://www.easyfun.gg/cloud-games/clash-royale-cloud-online.html',
+                                isExternal: true,
+                                featured: true,
+                            },
+                            {
+                                id: 'custom-roblox',
+                                name: 'Roblox',
+                                author: 'Cloud',
+                                description: 'By Cloud',
+                                coverUrl: '/assets/images/roblox.jpg',
+                                gameUrl: 'https://www.easyfun.gg/cloud-games/roblox.html',
+                                isExternal: true,
+                                featured: true,
+                            },
+                        ];
+                        // Avoid duplicates if already added
+                        for (let i = customGames.length - 1; i >= 0; i--) {
+                            const g = customGames[i];
+                            if (!allGames.some(x => (x.name || '').toLowerCase() === g.name.toLowerCase())) {
+                                allGames.unshift(g);
+                            }
+                        }
+                    } catch (_) {}
                                         
                     gamesDataLoaded = true;
                     
