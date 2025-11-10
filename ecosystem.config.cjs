@@ -3,7 +3,7 @@ module.exports = {
     {
       name: "current",
       script: "bun",
-      args: "start",
+      args: "start:nopretty",
       exec_mode: "fork",
       instances: 1,
       autorestart: true,
