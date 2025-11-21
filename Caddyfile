@@ -1,0 +1,14 @@
+{
+    auto_https off
+}
+
+:3002 {
+    # Main Current server
+    reverse_proxy / http://localhost:3000
+
+    # Epoxy HTTP routes
+    reverse_proxy /epoxy/* http://localhost:3001
+
+    # Epoxy WebSocket route
+    reverse_proxy /ws http://localhost:3001
+}
